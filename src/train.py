@@ -1,7 +1,9 @@
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
 import pickle
 import os
 
@@ -30,6 +32,15 @@ pickle.dump(knn, open(filename, 'wb'))
 y_pred = knn.predict(X_test)
 print("Precisión del modelo: ", accuracy_score(y_test, y_pred))
 
+# Generar el informe de clasificación
+print("\nInforme de Clasificación:")
+print(classification_report(y_test, y_pred, target_names=iris.target_names))
 
-
-
+# Calcular y mostrar la matriz de confusión
+conf_matrix = confusion_matrix(y_test, y_pred)
+plt.figure(figsize=(8, 6))
+sns.heatmap(conf_matrix, annot=True, cmap='Blues', xticklabels=iris.target_names, yticklabels=iris.target_names)
+plt.xlabel('Predicted Labels')
+plt.ylabel('True Labels')
+plt.title('Matriz de Confusión')
+plt.show()
