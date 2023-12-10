@@ -6,7 +6,7 @@ Este script de Python utiliza un modelo previamente entrenado para predecir la e
 
 1. Clona el repositorio:
    ```bash
-   git clone https://github.com/tu_usuario/tu_repositorio.git
+   git clone https://github.com/christianLizama/proyectoFinal.git
 
 2. Instala las dependencias:
    ```bash
