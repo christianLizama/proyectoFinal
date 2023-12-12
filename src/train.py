@@ -1,12 +1,13 @@
+import numpy as np
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle
 import os
 import sys
+from knn_model import KNNClassifier
 
 # Cargar el conjunto de datos Iris
 iris = load_iris()
@@ -40,34 +41,32 @@ if test_size is None or random_state is None or n_neighbors is None:
 # Dividir el conjunto de datos en un conjunto de entrenamiento y un conjunto de prueba
 X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=test_size, random_state=random_state)
 
-# Crear un modelo KNN con el número de vecinos especificado
-knn = KNeighborsClassifier(n_neighbors=n_neighbors)
+# Crear y entrenar el modelo KNN personalizado
+knn_custom = KNNClassifier(k=n_neighbors)
+knn_custom.fit(X_train, y_train)
 
-# Entrenar el modelo KNN en el conjunto de entrenamiento
-knn.fit(X_train, y_train)
-
-# Verificar si el directorio 'model' existe, si no, crearlo
+# Guardar el modelo entrenado en un archivo
 directory = 'model'
 if not os.path.exists(directory):
     os.makedirs(directory)
 
-# Guardar el modelo entrenado en un archivo
-filename = 'model/knn_model.sav'
-pickle.dump(knn, open(filename, 'wb'))
+filename_custom = 'model/knn_model_custom.sav'
+pickle.dump(knn_custom, open(filename_custom, 'wb'))
 
 # Imprimir la precisión del modelo en el conjunto de prueba
-y_pred = knn.predict(X_test)
-print("Precisión del modelo: ", accuracy_score(y_test, y_pred))
+y_pred_custom = knn_custom.predict(X_test)
+print("Precisión del modelo personalizado: ", accuracy_score(y_test, y_pred_custom))
 
 # Generar el informe de clasificación
 print("\nInforme de Clasificación:")
-print(classification_report(y_test, y_pred, target_names=iris.target_names))
+print(classification_report(y_test, y_pred_custom, target_names=iris.target_names))
 
 # Calcular y mostrar la matriz de confusión
-conf_matrix = confusion_matrix(y_test, y_pred)
+conf_matrix_custom = confusion_matrix(y_test, y_pred_custom)
 plt.figure(figsize=(8, 6))
-sns.heatmap(conf_matrix, annot=True, cmap='Blues', xticklabels=iris.target_names, yticklabels=iris.target_names)
+sns.heatmap(conf_matrix_custom, annot=True, cmap='Blues', xticklabels=iris.target_names, yticklabels=iris.target_names)
 plt.xlabel('Predicted Labels')
 plt.ylabel('True Labels')
 plt.title('Matriz de Confusión')
 plt.show()
+

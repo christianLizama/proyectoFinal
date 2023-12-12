@@ -1,9 +1,10 @@
 import pickle
 import sys
+from knn_model import KNNClassifier
 
 # Cargar el modelo entrenado desde el archivo
-filename = 'model/knn_model.sav'
-loaded_model = pickle.load(open(filename, 'rb'))
+filename = 'model/knn_model_custom.sav'
+loaded_model_custom = pickle.load(open(filename, 'rb'))
 
 # Obtener los valores de las características de la flor desde los argumentos de línea de comandos con etiquetas
 if len(sys.argv) != 9 or any(arg.startswith('--') is False for arg in sys.argv[1::2]):
@@ -27,10 +28,10 @@ except KeyError as e:
     print(f"La etiqueta {e} no está presente o se proporcionaron valores incorrectos.")
     sys.exit(1)
 
-predicted_class = loaded_model.predict([input_features])
+predicted_class_custom = loaded_model_custom.predict([input_features])
 
 # Mapear el valor numérico de la clase a su nombre correspondiente
 species_mapping = {0: 'Setosa', 1: 'Versicolor', 2: 'Virginica'}
-predicted_species = species_mapping[predicted_class[0]]
+predicted_species_custom = species_mapping[predicted_class_custom[0]]
 
-print("La especie predicha para los valores de entrada es:", predicted_species)
+print("La especie predicha para los valores de entrada es:", predicted_species_custom)
